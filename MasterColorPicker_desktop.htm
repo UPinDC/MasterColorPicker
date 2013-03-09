@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name='description' content='MasterColorPicker: a JavaScript color-picker delivering all the color you can handle.' />
+<meta name='keywords' content='color picker, javascript color picker, master color picker, professional color picker, websafe color picker, harmonic color picker' />
+<meta name='author' content='Joe Golembieski, SoftMoon-WebWare' />
+<meta name='copyright' content='Copyright © 2013 Joe Golembieski, SoftMoon-WebWare' />
+<meta name="generator" content="tsWebEditor (tswebeditor.net.tc - www.tswebeditor.tk)" />
+<meta name="generator" content="tsWebEditor (tswebeditor.tigris.org)" />
+<title>MasterColorPicker desktop from SoftMoon WebWare</title>
+<link rel='stylesheet' type='text/css' media="screen, projection" href='color-pickers/SoftMoon-WebWare/MasterColorPicker.css' title='MasterColorPicker' />
+<style type="text/css">
+body, section, div {
+  margin: 0;
+	padding: 0; }
+body {
+	color: white;
+	background: black; }
+
+#MasterColorPicker_mainPanel,
+#MasterColorPicker_mainPanel table.selectedPicker {
+	display: block; }
+
+body > input {
+	display: block;
+	width: 24em;
+	font-size: 1.618em;
+	color: black;
+	background-color: white; }
+.help {
+	position: relative;
+	display: inline-block;
+	padding: 0;
+	color: black;
+	background-color: white;
+	border-radius: .618em;
+	z-index: 6180; }
+.help > div {
+	display: none;
+	position: absolute;
+	top: 0;
+	bottom: auto;
+	left: 0;
+	right: auto;
+	width: 37em;
+	padding: 0 .618em .618em .618em;
+	text-align: left;
+	color: black;
+	background-color: white;
+	border-radius: .618em;
+	z-index: 618; }
+.help:hover > div {
+	display: block; }
+.help ul,
+.help dl {
+	list-style-type: disc;
+	list-style-position: outside;
+	margin: 0 1.618em; }
+.help ul ul {
+	list-style-type: circle; }
+.help p {
+	margin: .618em 0 0 0; }
+.help dd {
+	margin: 0 1.168em; }
+.help kbd {
+	display: inline-block; }
+.help li:nth-child(3) li kbd {
+	padding-left: 1.382em; }
+kbd span {
+	display: inline-block;
+	position: static;
+	color: white;
+	background-color: #202040;
+	text-align: center;
+	margin: 0 .382em;
+	padding: 0 .618em;
+	border: 1px solid #8080FF;
+	border-bottom: 2px solid #404080;
+	border-right: 2px solid #404080;
+	border-radius: 1.618em / 2em; }
+
+p img {
+	display: block; }
+
+.numerance {
+	font-size: .618em;
+	vertical-align: .618em;
+	line-height: 100%; }
+.macronym {
+	display: inline;
+	font-size: .763924em;
+	vertical-align: .236076em;
+	line-height: 100%; }
+acronym.macronym {
+	font-size: .382em;
+	vertical-align: 1.1618em;
+	border-bottom: none; }
+mark {
+	background-color: inherit; }
+#tester1 {white-space: pre;}
+</style>
+
+<!--[if lt IE 10]>
+<script type='text/javascript' src="JS_toolbucket/freqdec-fd-slider-01084d3/js/fd-slider_SM-enhanced.js"></script>
+<link rel="stylesheet" type="text/css" media="screen, projection" href="JS_toolbucket/freqdec-fd-slider-01084d3/css/fd-slider_SM-enhanced-compatible.css" />
+<link rel="stylesheet" type="text/css" media="screen, projection" href="color-pickers/SoftMoon-WebWare/MasterColorPicker_MSIE9-patch.css" />
+<style type="text/css">
+#MasterColorPicker_mainPanel {
+	top: 2.618em;
+	padding-top: 0; }
+</style>
+<![endif]-->
+
+<!--[if IE]>
+<style type="text/css">
+#MasterColorPicker_options.activePickerPanel > div div {display: block;}
+
+#MasterColorPicker_mainPanel table {border-top: none;}
+#MasterColorPicker_mainPanel table caption {
+	border: 1px solid;
+	border-bottom: none; }
+#MasterColorPicker_mainPanel table#BeezEye caption {
+	border-right: none; }
+
+legend {color: inherit;}
+</style>
+<![endif]-->
+
+
+<script type='text/javascript' src='JS_toolbucket/UniDOM.js'></script>
+<script type='text/javascript' src='JS_toolbucket/SoftMoon-WebWare/rgb.js'></script>
+<script type='text/javascript' src='JS_toolbucket/SoftMoon-WebWare/Picker.js'></script>
+<script type="text/javascript" src="color-pickers/Rigden_colorblind-convert_table.js"></script>
+
+</head>
+<body>
+<input type='MasterColorPicker' id='color-picker_input' />
+<script>
+UniDOM.addEventHandler(document.getElementById('color-picker_input'), 'onkeypress', function(event)  {
+	if (event.charCode==37 /*5% key*/  &&  event.shiftKey  &&  event.ctrlKey  &&  this.value.match( /°/ )==null)  { var m;
+		if (m=this.value.match( /[0-9]+(?:\.[0-9]*)?\b/ ))  this.value=this.value.substr(0, m.index+m[0].length)+'°'+this.value.substr(m.index+m[0].length);
+		else  this.value=this.value+'°';  }  } );
+</script>
+<div class='help'>☺help☺
+<div>
+<p class='_1D'>Valid values for colors include:</p>
+<ul class='_1D'>
+	<li>RGB values in hexadecimal (<acronym title='also known as'>a.k.a.</acronym> <abbr>hex</abbr>) with or without the leading <kbd>#</kbd> symbol.</li>
+	<li>RGB values as:
+		<ul>
+			<li>integer byte values (<kbd>0-255</kbd>)</li>
+			<li>decimal ratios (<kbd>0-0.999… ‖ 1</kbd> → depending on whether “byte” or “factor” is chosen in the options,
+					“1” may be =100% or “1” of “0-255”)</li>
+			<li>percent ratios (<kbd>0%-100%</kbd> – be sure to use the percent <kbd>%</kbd> symbol)</li>
+		</ul>
+			 Each value may be separated by spaces/commas/semicolons.&nbsp;
+			 You may wrap or prefix the values with <kbd>rgb( )</kbd> or <kbd>rgb:</kbd> but that is not necessary.</li>
+	<li>various different color-space models including:
+		<ul>
+			<li>CMYK (does not need to be wrapped or prefixed)</li>
+			<li>CMY</li>
+			<li>HSB / HSV</li>
+			<li>HSL</li>
+			<li>HCG</li>
+			<li>XYZ →&nbsp; (Observer = 2°, Illuminant = D65) <kbd>0 ≤ X ≤ 95.047</kbd>, <kbd>0 ≤ Y ≤ 100</kbd>, <kbd>0 ≤ Z ≤ 108.883</kbd></li>
+		</ul>
+			Use models by wrapping or prefixing their given values.&nbsp;
+			Values may be given as decimal ratios (<kbd>0-1</kbd> except see XYZ) or percent ratios (<kbd>0%-100%</kbd>),
+			or for Hue values, in degrees (<kbd>0°-360°</kbd> – using the <kbd>°</kbd> symbol or “<kbd>deg</kbd>”).&nbsp;
+			The “degrees” <kbd>°</kbd> symbol may be entered by typing <kbd><span>SHIFT</span><span>CTRL</span><span>5</span></kbd></li>
+	<li>Any of the available color-table colors.&nbsp;
+			Colors should be prefixed or wrapped with the appropriate color-table name.&nbsp;
+			<acronym>HTML</acronym>–<acronym>CSS</acronym> colors do not need to be wrapped or prefixed.</li>
+</ul>
+</div>
+</div><!--  close  help  -->
+<p>created by:
+<img src='images/SoftMoonWebWare.gif' alt='SoftMoon WebWare' />
+</p>
+<!-------------- cut here to use the MasterColorPicker HTML in your own page ---------------->
+
+
+<!--  //  MasterColorPicker  Copyright © 2012, 2013 Joe Golembieski, SoftMoon-WebWare
+// release 2.0  Jan 17, 2013
+/*
+	Note that these color charts and palettes will work without an enclosing <form>,
+but to retain the settings this file may be included inside an existing web <form></form>
+*/
+-->
+
+<div id='MasterColorPicker_options' class='pickerPanel'>
+
+<div>Options▼
+<div>
+<fieldset><legend>RainbowMaestro mode:</legend>
+<label>output<select id='palette_mode' name='palette_mode' onchange='SoftMoon.WebWare.buildSpectralPalette()'>
+	<option selected='selected'>hex</option>
+	<option>RGB</option>
+	<option>native</option>
+	<option>HSB</option>
+	<option>HSL</option>
+	<option>HCG</option>
+	<option>CMYK</option>
+</select></label>
+<label>¿<input type='checkbox' id='keepPrecision' name='keepPrecision' value='true' checked="checked"
+	onchange='SoftMoon.WebWare.rgb.keepPrecision=this.checked;' />keep precision?
+	<p>Hex and RGB values are calculated from the native format, and others are calculated from the RGB values.&nbsp;
+			RGB values may be rounded off to integers in the process yielding differences that are especially noticeable in Hue values.&nbsp;
+			(More minor round off errors will always be possible due to floating-point mathematics used by computers.)&nbsp;
+			Note RGB values will always be shown as integers, and are always used internally by the computer’s hardware
+			as integers, so by <strong>not</strong> keeping precision, resulting conversions from the RGB values reflect
+			the “used RGB” values.</p></label>
+</fieldset>
+
+<label>¿<input type='checkbox' name='RGB_autoconvert' id='RGB_autoconvert' value='true' checked="checked" />auto-convert?
+	<span> Clicking a choice below can auto-convert your selected colors to the chosen color-space-model format.</span></label>
+<fieldset id='RGB_by'><legend>Enter <acronym>RGB</acronym> color-space values as:</legend>
+	<label><input type='radio' name='RGB_by' value='byte' onclick='SoftMoon.WebWare.rgb.valuesAsByte= this.checked' checked="checked" />Byte value (integer 0—255)</label>
+	<label><input type='radio' name='RGB_by' value='factor' onclick='SoftMoon.WebWare.rgb.valuesAsByte= !this.checked' />Percent or Factor</label>
+</fieldset>
+<fieldset id='RGB_convertFrom'><legend>Enter color-space values as:</legend>
+	<label><input type='radio' name='RGB_convertFrom' value='percent' onclick='SoftMoon.WebWare.rgb.valuesAsPercent= this.checked' checked="checked" />Percent (0.0%—100.0%)</label>
+	<label><input type='radio' name='RGB_convertFrom' value='factor' onclick='SoftMoon.WebWare.rgb.valuesAsPercent= !this.checked'/>Factor (0.0—1.0)</label>
+</fieldset>
+<fieldset id='RGB_convertHue'><legend>Enter Hue values as:</legend>
+	<label><input type='radio' name='RGB_convertHue' value='degrees' onclick='SoftMoon.WebWare.rgb.huesByDegrees= this.checked' checked="checked"/>Degrees (0.0°—360.0°)</label>
+	<label><input type='radio' name='RGB_convertHue' value='factor' onclick='SoftMoon.WebWare.rgb.huesByDegrees= !this.checked' />Percent or Factor</label>
+</fieldset>
+<ul id='bull'>
+<li> all <acronym>RGB</acronym> values entered between <span>0–0.999…</span> when the default mode is “byte” will be considered factors.</li>
+<li> percent values may be forced using values <span>0.0%–100.0%</span> entered with a trailing “percent” sign.</li>
+<li> hue values may be forced to degrees using values <span>0.0°–360.0°</span> entered with a trailing “degrees” sign or by using the three letters “deg”.</li>
+</ul>
+</div></div>
+
+</div><!--  close  MasterColorPicker_options  -->
+
+
+
+
+<section id='MasterColorPicker_mainPanel' class='pickerPanel init'><!--  class “init” is removed after the color-tables are generated - they need to be shown while this process occurs  -->
+<header><h1>MasterColorPicker™</h1> by <address>SoftMoon-WebWare</address></header>
+
+<label>palette: <select id='palette_select' name='palette'>
+<option selected='selected'>RainbowMaestro</option>
+<option>Spectral</option>
+<option>BeezEye</option>
+<option>Simple²</option>
+<option>YinYang NíHóng</option>
+</select></label>
+
+
+<table class='picker palette' id='Spectral'><caption><h6>Spectral Progressive Color-Picker™</h6>click to choose<span id='SpectralIndicator'>&nbsp;<span id='SpectralSwatch'></span></span></caption>
+
+<thead><tr><td colspan='100'><table>
+<tr>
+	<td colspan='6'><label>hue variety: <input type='range' name='hue_variety' value='30' max='100' min='10' step='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></label>
+									<label>mix variety: <input type='range' name='mix_variety' value='7' max='20' min='5' step='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></label><br />
+									<label>x-shift: <input type='range' name='x_shift' value='0' max='6.28' min='0' step='0.01' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></label>
+									<label>y-shift: <input type='range' name='y_shift' value='0' max='1' min='0' step='0.01' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></label>
+									<label>mix shift: <input type='range' name='phase_shift' value='4.71' max='9.42' min='0' step='0.01' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></label></td><!-- Opera limits the number of digits in the value,min,max fields  -->
+</tr>
+<tr><th></th><th>channel</th><th>intensity</th><th>variation</th><th>shift</th><th>frequency</th></tr>
+<tr style='color:red'><td>RED</td>
+	<td>
+		<input type='radio' name='red_c' value='1' checked='checked' onchange='SoftMoon.WebWare.buildSpectralPalette()' />
+		<input type='radio' name='red_c' value='2' onchange='SoftMoon.WebWare.buildSpectralPalette()' />
+		<input type='radio' name='red_c' value='3' onchange='SoftMoon.WebWare.buildSpectralPalette()' />
+	</td>
+	<td><input type='range' name='red_i' value='128' max='255' min='0' step='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+	<td><input type='range' name='red_v' value='128' max='255' min='0' step='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+	<td><input type='range' name='red_s' value='0' max='6.28' min='0' step='0.01' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+	<td><input type='range' name='red_f' value='1' max='2' min='0.01' step='0.01' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+</tr>
+<tr style='color:lime'><td>GREEN</td>
+	<td>
+		<input type='radio' name='grn_c' value='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' />
+		<input type='radio' name='grn_c' value='2' checked='checked' onchange='SoftMoon.WebWare.buildSpectralPalette()' />
+		<input type='radio' name='grn_c' value='3' onchange='SoftMoon.WebWare.buildSpectralPalette()' />
+	</td>
+	<td><input type='range' name='grn_i' value='128' max='255' min='0' step='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+	<td><input type='range' name='grn_v' value='128' max='255' min='0' step='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+	<td><input type='range' name='grn_s' value='0' max='6.28' min='0' step='0.01' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+	<td><input type='range' name='grn_f' value='1' max='2' min='0.01' step='0.01' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+</tr>
+<tr style='color:#4040FF'><td>BLUE</td>
+	<td>
+		<input type='radio' name='blu_c' value='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' />
+		<input type='radio' name='blu_c' value='2' onchange='SoftMoon.WebWare.buildSpectralPalette()' />
+		<input type='radio' name='blu_c' value='3' checked='checked' onchange='SoftMoon.WebWare.buildSpectralPalette()' />
+	</td>
+	<td><input type='range' name='blu_i' value='128' max='255' min='0' step='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+	<td><input type='range' name='blu_v' value='128' max='255' min='0' step='1' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+	<td><input type='range' name='blu_s' value='0' max='6.28' min='0' step='0.01' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+	<td><input type='range' name='blu_f' value='1' max='2' min='0.01' step='0.01' onchange='SoftMoon.WebWare.buildSpectralPalette()' /></td>
+</tr>
+</table></td></tr></thead>
+
+<tbody>
+</tbody>
+</table>
+
+
+
+<table class='picker palette' id='BeezEye'>
+<caption><h6>BeezEye Color Picker™</h6>click to choose</caption>
+<tbody>
+<tr>
+	<td><label id="BeezEye_twist_value_transformer" data-fd-slider-rotate="330">Twist<input type='range' name='BeezEye_twist_value' value='50' min='0' mmax='100' data-fd-slider-transformer="BeezEye_twist_value_transformer" /></label></td>
+	<td><fieldset><legend>color space</legend>
+		<dl>
+			<dt>CMYK</dt>
+				<dd>Cyan, Magenta, Yellow, Black</dd>
+			<dt>HSB / HSV</dt>
+				<dd>Hue, Saturation, Brightness a.k.a Value</dd>
+			<dt>HSL</dt>
+				<dd>Hue, Saturation, Lightness</dd>
+			<dt>HCG</dt>
+				<dd>Hue, Chroma, Gray</dd>
+			<dt>Curve</dt>
+				<dd>modulates the saturation rate</dd>
+			<dt>Twist</dt>
+				<dd>twists the color-disk at its center to make it easier to find progressive color-series</dd>
+		</dl>
+		<label><input type='radio' name='BeezEye_model' value='cmyk' />CMYK</label>
+		<label><input type='radio' name='BeezEye_model' value='hsb' />HSB / HSV</label>
+		<label><input type='radio' name='BeezEye_model' value='hsl' checked='checked' />HSL</label>
+		<label><input type='radio' name='BeezEye_model' value='hcg' />HCG</label>
+		<label>¿<input type='checkbox' name='BeezEye_curve' value='curve' />curve?</label>
+		<label>¿<input type='checkbox' name='BeezEye_twist' value='twist' />twist?</label>
+		</fieldset>
+	</td>
+</tr>
+<tr>
+	<td rowspan='2'><canvas width='360' height='360'></canvas></td>
+	<td><label id="BeezEye_value_transformer" data-fd-slider-rotate="270">Brightness <span>Value</span><input type='range' name='BeezEye_value' value='50' min='0' max='100' data-fd-slider-transformer="BeezEye_value_transformer" /></label></td>
+</tr>
+<tr>
+	<td valign='bottom'><fieldset>
+		<label id="BeezEye_curve_value_transformer" data-fd-slider-rotate="315">Curve<input type='range' name='BeezEye_curve_value' value='50' min='1' max='100' data-fd-slider-transformer="BeezEye_curve_value_transformer" /></label>
+		<label><input type='checkbox' name='BeezEye_curve_midring' value='midring' /> Mid–Ring</label>
+		</fieldset>
+	</td>
+</tr>
+<tr>
+	<td><label>Hue Variety<input type='range' name='BeezEye_variety' value='15' min='5' max='89' step='2' /></label></td>
+	<td rowspan='2' id='BeezEye_swatch'></td>
+</tr>
+<!--  tr><td><label>Eye size<input type='range' name='BeezEye_size' value='360' min='160' max='720' step='12' /></label></td></tr  -->
+<tr><td id='BeezEye_indicator'> </td></tr>
+</tbody>
+</table>
+
+
+
+<table class='picker palette' id='RainbowMaestro'><caption><h6>RainbowMaestro Harmonic Color Picker™</h6>click to choose</caption>
+<thead>
+	<tr><td colspan='2'>
+	<label><input type='checkbox' name='RainbowMaestro_websafe' value='true' checked='checked' />websafe</label>
+	<label><input type='checkbox' name='RainbowMaestro_splitComplement' value='true' />split-compliments</label>
+	<label><input type='checkbox' name='RainbowMaestro_lock' value='true' />lock focal hue</label>
+	<label><input type='checkbox' name='RainbowMaestro_colorblind' value='true' checked='checked' />colorblind assist<mark class='footmark'>‡</mark></label>
+	</td></tr>
+	<tr><td colspan='2'>
+	<label>variety<input type='range' name='RainbowMaestro_variety' value='6' min='6' max='32' /></label>
+	<label>¿focals only<input type='checkbox' name='RainbowMaestro_focalsOnly' value='true' />?</label>
+	 <input type='hidden' name='RainbowMaestro_focalHue' value='0' />
+	<label id='RainbowMaestro_hueIndicator'>using focal hue:<input type='number' min='0' max='360' value='0'
+			name='RainbowMaestro_focalHue_degrees' size='13' maxlength='9' title='Hue given in degrees (0.0°–360.0°).' /><span>&nbsp;</span></label>
+	</td></tr>
+	<tr><td colspan='2' id='RainbowMaestro_swatch'><span id='RainbowMaestro_indicator'>&nbsp;</span></td><tr>
+</thead>
+<tbody>
+<tr><th>full color</th>
+		<th class='colorblind'>Protan simulation<mark class='footmark'>‡</mark></th></tr>
+<tr><td><div class='subpalette_swatch'></div><canvas width='360' height='360'></canvas></td>
+		<td class='colorblind'><div class='subpalette_swatch'></div><canvas width='360' height='360'></canvas></td></tr>
+<tr><th class='colorblind'>Deutan simulation<mark class='footmark'>‡</mark></th>
+		<th class='colorblind'>Tritan simulation<mark class='footmark'>‡</mark></th></tr>
+<tr><td class='colorblind'><div class='subpalette_swatch'></div><canvas width='360' height='360'></canvas></td>
+		<td class='colorblind'><div class='subpalette_swatch'></div><canvas width='360' height='360'></canvas></td></tr>
+</tbody>
+<tfoot>
+	<tr class='colorblind'><td colspan='2'><mark class='footmark'>‡</mark>simulations are approximate, and may vary between individuals and monitors</td></tr>
+	<tr class='colorblind'><td colspan='2'><mark class='footmark'>‡</mark>special thanks to: &nbsp;
+		http://safecolours.rigdenage.com/colours2.html</td></tr>
+</tfoot>
+</table>
+
+
+<table class='picker palette' id='Simple²'><caption><h6>Simple² Color Picker™</h6>click to choose</caption>
+<tbody>
+<tr>
+<td colspan='3'><div class='indicator' id='Simple²saturation'>99.99%</div></td>
+<td colspan='2'   style='border: 1px solid; border-bottom: none'
+		>Chroma (Saturation)<br /><span class='lft'>0→</span>←‖1‖→<span class='rt'>←0</span></td>
+<td colspan='2'><div class='indicator' id='Simple²hue'>359.999°</div></td>
+</tr>
+<tr>
+<td   style='border-top: 1px solid; border-bottom: 1px solid;'
+		><div><span class='lft'>0→</span>←←Saturation→→<span class='rt'>←1</span></div></td>
+<td id="Simple²hSl"><canvas width='18' height='360'></canvas></td>
+<td id="Simple²hSv" style='border-left: 1px solid;'
+		><canvas width='18' height='360'></canvas></td>
+<td id="Simple²wrapper" colspan='2'   style='border-left: 1px solid'
+		><canvas width='360' height='360'></canvas></td>
+<td   style='border: 1px solid; border-left: none'
+		><div><span class='lft'>«0°→→</span>←←Hue→→<span class='rt'>←←360°»</span></div></td>
+<td id="Simple²interface"><label id='Simple²_variety_transformer' data-fd-slider-rotate="90">variety<input type='range' name='Simple²_variety' value='12' min='12' max='360' step='2' data-fd-slider-transformer="Simple²_variety_transformer" /></label></td>
+</tr>
+<tr>
+<td rowspan='5'  style='border-bottom: 1px solid' valign='bottom'
+		><label for='Simple²_lock'>← lock ↑</label><input type='checkbox' name='Simple²_lock' value='locked' /></td>
+<td   style='border-left: 1px solid'><div>HSL</div></td>
+<td   style='border-left: 1px solid'><div>HSB</div></td>
+<td    style='border: 1px solid; border-top: none'>Gray=0</td><td   style='border: 1px solid; border-top: none'>Gray=1</td>
+<td id="Simple²swatch" colspan='2' rowspan='6' style='border: 1px solid white'></td>
+</tr>
+<tr>
+<td   style='border-left: 1px solid'></td>
+<td   style='border-left: 1px solid'></td>
+<td id="Simple²hsV" colspan='2'><canvas width='360' height='18'></canvas></td>
+</tr>
+<tr>
+<td   style='border-left: 1px solid'></td>
+<td   style='border-left: 1px solid; border-bottom: 1px solid'></td>
+<td colspan='2'   style='border-bottom: 1px solid'
+		><span class='lft'>0→</span>←←Brightness / Value→→<span class='rt'>←1</span></td>
+</tr>
+<tr>
+<td   style='border-left: 1px solid'></td>
+<td></td>
+<td id="Simple²hsL" colspan='2'><canvas width='360' height='18'></canvas></td>
+</tr>
+<tr>
+<td   style='border-left: 1px solid; border-bottom: 1px solid'><div class='indicator' id='Simple²lvl'>99.99%</div></td>
+<td   style='border-bottom: 1px solid'></td>
+<td colspan='2'   style='border-bottom: 1px solid'
+		><span class='lft'>0→</span>←←Lightness→→<span class='rt'>←1</span></td>
+</tr>
+<tr>
+<td id="Simple²indicator" colspan='5'>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+
+
+<table class='picker palette' id='YinYangNíHóng'><caption><h6>YinYang NíHóng<span>the Tao of Color Pickers™</span></h6>click to choose</caption>
+<thead><tr>
+<td><label><input type='radio' name='YinYang NíHóng' value='HSB' />HSB / HSV<dfn>Hue, Saturation, Brightness/Value</dfn></label></td>
+<td><label><input type='radio' name='YinYang NíHóng' value='HSL' checked='checked' />HSL<dfn>Hue, Saturation, Lightness</dfn></label></td>
+<td><label><input type='radio' name='YinYang NíHóng' value='HCG' />HCG<dfn>Hue, Chroma, Gray</dfn></label></td>
+</tr></thead>
+<tbody>
+<tr><td colspan='3' id='YinYangNíHóng_swatch'><canvas width='421' height='421'></canvas></td></tr>
+<tr><td colspan='3' id='YinYangNíHóng_indicator'>&nbsp;</td></tr>
+</tbody>
+<tfoot>
+<tr><td colspan='3'><dfn>YinYang:</dfn> balance of interplay between opposites (here: light &amp; dark, color &amp; gray).</td></tr>
+<tr><td><dfn>NíHóng:</dfn> Neon.</td><td><dfn>Ní:</dfn> Rainbow; You.</td><td><dfn>Hóng:</dfn> Rainbow; Great.</td></tr>
+<tr><td colspan='3'><dfn>Tao:</dfn> all-encompassing unity with balance of the most simple way.</td></tr>
+<tr><td colspan='3'>All 16,777,216 different colors the modern computer can show within 2 clicks.</td></tr>
+</tfoot>
+</table>
+
+</section><!-- close MasterColorPicker_mainPanel -->
+
+<script type="text/javascript" src="color-pickers/SoftMoon-WebWare/MasterColorPicker.js"></script>
+<script type="text/javascript" src="color-pickers/SoftMoon-WebWare/color-space_autoReformatter.js"></script>
+
+
+<!-------------- cut here to use the MasterColorPicker HTML in your own page ---------------->
+
+<!--  use the scripts below if don’t want to use the server-version for palette table files  -->
+<script type="text/javascript">
+var loaded_palettes=new Array;  // each palette file should push its palette(s) onto this Array
+with (SoftMoon.WebWare)  {  //UniDOM may be global or a property of SoftMoon.WebWare
+UniDOM.addEventHandler(window, 'onload', function()  {
+	initPaletteTables(loaded_palettes);
+	activateColorSpaceFormatConverters(function() {return MasterColorPicker.registeredTargets});
+	MasterColorPicker.showColorAs='background';
+	MasterColorPicker.masterTarget=MasterColorPicker.registeredTargets[0];
+	MasterColorPicker.registeredTargets[0].focus();
+	} );  }
+</script>
+<script type="text/javascript" src="color_palettes/desktop/HTML.desktop_palette.js"></script>
+<script type="text/javascript" src="color_palettes/desktop/common.desktop_palette.js"></script>
+<script type="text/javascript" src="color_palettes/desktop/Brewer.desktop_palette.js"></script>
+<script type="text/javascript" src="color_palettes/desktop/Crayola.desktop_palette.js"></script>
+<script type="text/javascript" src="color_palettes/desktop/OpenOffice.desktop_palette.js"></script>
+<script type="text/javascript" src="color_palettes/desktop/universal.desktop_palette.js"></script>
+<script type="text/javascript" src="color_palettes/desktop/X11.desktop_palette.js"></script>
+</body>
+</html>

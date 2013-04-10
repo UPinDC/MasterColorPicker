@@ -1,0 +1,38 @@
+#MasterColorPicker_mainPanel {
+  position: absolute;
+	top: 1.618em;
+	max-height: 72em;
+	padding-top: .382em; }
+#MasterColorPicker_options {
+	position: absolute;
+	padding-left: 5.618em; }
+#MasterColorPicker_mainPanel > header,
+#MasterColorPicker_mainPanel > header + label {
+	display: block;
+	position: static;
+	margin: .382em .618em;  }
+
+table#Spectral  {width: 49em;}
+#BeezEye tr:nth-child(2) td:last-child  {height: 0;}
+table#BeezEye tr:first-child td:first-child label  {left: 0px;}
+table#BeezEye tr:nth-child(2) label span  {color: white;}
+table#BeezEye tr:nth-child(2) label span.fd-slider,
+table#BeezEye tr:nth-child(2) label span.fd-slider span {
+	color: inherit;
+	padding: 0; }
+
+table#BeezEye tr:nth-child(3) fieldset label:first-child {
+	top: 18.618em;
+	left: -5.362em; }
+
+.fd-slider {
+	width: 10em;
+	display: inline-block;
+	vertical-align: bottom;
+	padding: 0;
+	margin: 0; }
+
+table#BeezEye input.fd-form-element-hidden,
+table#BeezEye fieldset label input.fd-form-element-hidden {display: none;}
+
+#BeezEye tr:first-child td:first-child .fd-slider  {display: block;}

@@ -12,7 +12,7 @@
 <link rel='stylesheet' type='text/css' media="screen, projection" href='color-pickers/SoftMoon-WebWare/MasterColorPicker.css' title='MasterColorPicker' />
 <style type="text/css">
 body, section, header, footer, div, h1, h2, h4, h5, img, ul, ol, dl, menu, li {
-  margin: 0;
+	margin: 0;
 	padding: 0; }
 mark {
 	background-color: inherit; }
@@ -567,17 +567,17 @@ for more details on using the “color swatch”.</p>
 
 <p>You don’t need to use an <code>&lt;input type='text' /&gt;</code> with MasterColorPicker.&nbsp;
 <code>&lt;textarea&gt;</code>s, <code>&lt;select&gt;</code>s, <code>&lt;input type='text' list='datalistID' /&gt;</code>s,
-and even document text-nodes are automatically recognized by the <code>MasterColorPicker.select()</code> method.&nbsp;
+and even document text-nodes are automatically recognized by the <code>MasterColorPicker.pick()</code> method.&nbsp;
 By default, the JavaScript<mark class='macronym'>™</mark> value of
-<code>MasterColorPicker.selectionTarget.value</code> is set when a color is picked.&nbsp;
-If no <code>selectionTarget</code> is set then the <code>MasterColorPicker.masterSelectionTarget</code> is used, if any.&nbsp;
-The <code>selectionTarget</code> and <code>masterSelectionTarget</code> each may be any
+<code>MasterColorPicker.dataTarget.value</code> is set when a color is picked.&nbsp;
+If no <code>dataTarget</code> is set then the <code>MasterColorPicker.masterDataTarget</code> is used, if any.&nbsp;
+The <code>dataTarget</code> and <code>masterDataTarget</code> each may be any
 JavaScript<mark class='macronym'>™</mark> Object.&nbsp;
 Or they may be <code>&lt;input type='hidden'&gt;</code> if you don't care to show the user the dirty color-code,
 but want to send the value back to the server with a form-submittal.&nbsp;
 To supplement this functionality, add a JavaScript<mark class='macronym'>™</mark> function to the
-Array of <code>MasterColorPicker.selectFilters</code>.&nbsp;
-To replace this functionality, replace the <code>MasterColorPicker.select</code> method with your own function.&nbsp;
+Array of <code>MasterColorPicker.pickFilters</code>.&nbsp;
+To replace this functionality, replace the <code>MasterColorPicker.pick</code> method with your own function.&nbsp;
 See the file <code class='filename'>JS_toolbox/SoftMoon-WebWare/Picker.js</code> for more details.</p>
 
 
@@ -735,7 +735,7 @@ for example a choice of “YinYang NíHóng” corresponds to <abbr title='ident
 <p>To interface another color-picker with the MasterColorPicker framework is easy,
 but as powerful things go, this process has details that must be understood to fully utilize.&nbsp;
 Most simply, when a color is selected, using JavaScript<mark class='macronym'>™</mark>,
-simply call <code>MasterColorPicker.select(<var>……colorChoiceText……</var>)</code>;&nbsp;
+simply call <code>MasterColorPicker.pick(<var>……colorChoiceText……</var>)</code>;&nbsp;
 however this bypasses the central <code>x_ColorPicker</code> framework which can
 convert the choice to the user’s color-space preferences,
 and set the color of “color swatches”.&nbsp;</p>

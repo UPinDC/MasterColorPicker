@@ -1,4 +1,4 @@
-// MasterColorPicker.js  ~release ~1.0.2  April-9-2013  by SoftMoon Webware.
+// MasterColorPicker.js  ~release 1.0.4  June 3, 2013  by SoftMoon Webware.
 /*   written by and Copyright © 2011, 2012, 2013 Joe Golembieski, SoftMoon WebWare
 
 		This program is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@
 
 // requires  SoftMoon.WebWare.rgb
 // requires  SoftMoon.WebWare’s UniDOM package
+// requires  Softmoon.WebWare.Log  if you want to log for debugging (see this file's end)
 // subject to move to unique files (with more functions) in the future:
 //  • Math.Trig  (along with the defined “constants” under the  _  variable)
 //  • SoftMoon.WebWare.canvas_graphics
@@ -229,7 +230,7 @@ SoftMoon.WebWare.x_ColorPicker.handleClick=function(event, args)  {
 	return false;  }
 
 // this is the sub-method (MasterColorPicker.pickFilter) for
-//  the MasterColorPicker implementation of the Picker’s “select()” method.
+//  the MasterColorPicker implementation of the Picker’s “pick()” method.
 // this becomes a method of the MasterColorPicker implementation, so “this” refers to  MasterColorPicker
 SoftMoon.WebWare.x_ColorPicker.pickFilter=function(chosen)  { with (SoftMoon)  {  // RegExp (herein contains predefined regular expressions) may be the global standard implementation (the RegExp constructor), or a property of  SoftMoon
 	var matches, thisInstance=this;
@@ -298,7 +299,7 @@ SoftMoon.WebWare.makeTextReadable=function(elmnt, back)  {
 
 
 
-(function()  { //  “globals” wrapper for BeezEye Color Picker
+;(function()  { //  “globals” wrapper for BeezEye Color Picker
 	var hue, saturation, color_value, settings;
 
 SoftMoon.WebWare.BeezEye=new Object;
@@ -350,8 +351,8 @@ SoftMoon.WebWare.BeezEye.buildPalette=function()  {
 SoftMoon.WebWare.BeezEye.nativeToRGB=function(h,s,v)  {
 	var i, model;
 	for (i=0; i<settings.model.length; i++)  {
-		if (settings.model[i].checked)  {model=settings.model[i].value;  break;}  }
-	switch (model.toLowerCase())  {
+		if (settings.model[i].checked)  {model=settings.model[i].value.toLowerCase();  break;}  }
+	switch (model)  {
 		//note the rgb functions can accept values in many ways so we force it to recognize this format
 	case 'cmyk':
 		return SoftMoon.WebWare.rgb.from.cmyk(SoftMoon.WebWare.CMYK_from_hsv([h+'°', s+'%', v+'%']).toString('percent'));
@@ -431,7 +432,7 @@ SoftMoon.WebWare.BeezEyeColor=function(h, s, v)  { // degrees, percent, percent 
 with (SoftMoon.WebWare)  { // UniDOM may be global or a property of SoftMoon.WebWare
 	UniDOM.addEventHandler(window, 'onload', function()  { var model, i;
 		//first we set the private global members                                              ↓  this defines property names (of the array-object: settings)
-		settings=UniDOM.getElementsByName(document.getElementById('BeezEye'), "", true, function(n) {return n.name.match( /_(.+)$/ )[1];}); // grabs all the elements with a 'name' attribute (the <inputs>s) into an array, with corresponding properties
+		settings=UniDOM.getElementsByName(document.getElementById('BeezEye'), "", true, function(n) {return n.name.match( /_(.+)$/ )[1];}); // grabs all the elements with a 'name' attribute (the <input>s) into an array, with corresponding properties
 		for (i=0; i<settings.model.length; i++)  {
 			UniDOM.addEventHandler(settings.model[i], 'onchange', setColorSpace);
 			if (settings.model[i].checked)  setColorSpace.call(settings.model[i], false);  }
@@ -470,7 +471,7 @@ with (SoftMoon.WebWare)  { // UniDOM may be global or a property of SoftMoon.Web
 			if (flag)  BeezEye.buildPalette();  }
 		});
 }
-})();  // close “globals” wrapper
+})();  // close “BeezEye globals” wrapper
 
 
 
@@ -814,14 +815,19 @@ with (SoftMoon.WebWare)  { // UniDOM may be global or a property of SoftMoon.Web
 
 		MasterColorPicker.registerInterfaceElement(settings.focalHue_degrees, {tabToTarget: true});
 		UniDOM.addEventHandler(settings.focalHue_degrees, 'onkeydown', function(event) {
-			var keepKey=(event.keyCode<48 || event.keyCode==144  //basic function keys and numlock
+			MasterColorPicker.event=event;
+			keepKey=(event.keyCode<48 || event.keyCode==144  //basic function keys and numlock
 			|| (event.keyCode>=112  && event.keyCode<=123) //f1-f12
 			|| ( !(event.altKey || event.ctrlKey || event.shiftKey)
 					&& ((event.keyCode>=48  &&  event.keyCode<=57)  //numbers above letters
 							|| (event.keyCode>=96  &&  event.keyCode<=105)  //number keypad         ↓decimal & period
 							|| ((event.keyCode==110 || event.keyCode==190)  &&  this.value.match( /\./ )===null))));  //note the odd behavior of the value attribute of <input type='number' />.  Although (typeOf value == string), it may have extranious decimals parsed off (yet displayed to the user) so we can’t filter them out…
+			if (MasterColorPicker.debug)  MasterColorPicker.debug.log.write('MasterColorPicker — keydown  — keyPressed= '+event.keyCode+' ¦ keepKey= '+keepKey);
 			if (!keepKey)  event.preventDefault();  });
-		UniDOM.addEventHandler(settings.focalHue_degrees, 'onchange', function()  {
+		UniDOM.addEventHandler(settings.focalHue_degrees, 'onchange', function(event)  {
+			var key=MasterColorPicker.event && MasterColorPicker.event.keyCode;
+			if (MasterColorPicker.debug)  MasterColorPicker.debug.log.write('MasterColorPicker — onchange — keyPressed= '+key+' ¦ synFlag= '+event.flag);
+			if (key  &&  key!==13  &&  key!==9)  return;    // fix Opera − onchange “should” only occur in tandem with onblur when using keyboard input but occurs with every “characterized keystroke” when using Opera
 			settings.websafe.checked=false;
 			this.value.replace( /[^-0-9.]/ , "");
 			while (this.value<0)  {this.value=parseFloat(this.value)+360;}
@@ -1635,12 +1641,13 @@ SoftMoon.WebWare.buildPaletteTable.refColorMarks=[ '«' , '»' ];  // if a color
 //the Picker Class is generic; the pickFilter is for our color-picker application
 var MasterColorPicker=new SoftMoon.WebWare.Picker(
 	document.getElementById('MasterColorPicker_mainPanel'),
-	{ picker_select: document.getElementById('palette_select'),
+	{ //debugLogger: document.getElementById('MasterColorPicker_debugLog'),   //requires SoftMoon.WebWare.Log
+		picker_select: document.getElementById('palette_select'),
 		pickFilters: [SoftMoon.WebWare.x_ColorPicker.pickFilter] } );  // ← the pickFilter filters the “picked” text and
 			// handles any other chores before MasterColorPicker.pick() adds the text
 			//   to the active MasterColorPicker.dataTarget.value
 
-//these are options for the pickFilter function and it’s related colorSwatch function
+//these are options for the pickFilter function and its related colorSwatch function
 MasterColorPicker.useHash=true;  // ¿prefix hex values with a hash like this: #FF0099 ?
 MasterColorPicker.useRGB =true;  // ¿wrap rgb values like this: rgb(255, 0, 153) ?
 MasterColorPicker.useCMYK=true;  // ¿wrap cmyk values ?
@@ -1652,12 +1659,16 @@ MasterColorPicker.toggleBorder=true;      // of the swatch when it has a valid c
 MasterColorPicker.borderColor='invert';  // HTML/CSS color  or  'invert'
 
 //any interface element that requires “focus” needs to be registered to work properly
+/*  Now the palette_select resides on the “options” panel,
+  and would be registered automatically when that panel is registered (it won’t be registered twice if we register it here below),
+  so we could comment out the line below if:
+		•the palette select has an inline HTML attribute:  tabToTarget='true'
+		•we don’t care to tabToTarget  */
 MasterColorPicker.registerInterfaceElement(document.getElementById('palette_select'), {tabToTarget: true});
 
 //likewise, any document subsection that is not part of the picker mainPanel, but is part of the picker interface and
 //therefore may require “clicking on” or have elements that require “focus”, needs to be registered to work properly
 MasterColorPicker.registerInterfacePanel(document.getElementById('MasterColorPicker_options'));
-
 
 with (SoftMoon.WebWare)  { //UniDOM may be global or a property of SoftMoon.WebWare
 
@@ -1710,6 +1721,19 @@ UniDOM.addEventHandler(window, 'onload', function()  {
 
 	for (i=0; i<inps.length; i++)  {
 		MasterColorPicker.registerTargetElement(inps[i]);
-		UniDOM.addEventHandler(inps[i], ['onkeyup', 'onpaste', 'onchange'], onChng);  }  } );
+		UniDOM.addEventHandler(inps[i], ['onkeyup', 'onpaste', 'onchange'], onChng);  }
+
+	//Apple’s Safari renders slider-bars in solid black with a transparent background,
+	// and they cannot be seen on the black background of the mainPanel.
+	//We add in wrapper-spans only to manage this visual display aspect.
+	//These spans are styled by the default CSS stylesheet to give the sliders a gray background.
+	if (navigator.userAgent.match( /Safari/i )  &&  !navigator.userAgent.match( /Chrome/i ))  { var s;
+		inps=document.getElementById("MasterColorPicker_mainPanel").getElementsByTagName("input");
+		for (i=0; i<inps.length; i++)  {
+		  if (inps[i].type==='range'  &&  inps[i].name!=="BeezEye_value")  {
+				s=document.createElement("span");
+				s.className='MCP_fix_Safari';
+				inps[i].parentNode.insertBefore(s, inps[i]);
+				s.appendChild(inps[i]);  }	}  }  } );
 
 }  //close  with (SoftMoon.WebWare)

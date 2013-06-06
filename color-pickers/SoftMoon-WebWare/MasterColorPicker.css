@@ -1,8 +1,28 @@
-#MasterColorPicker_mainPanel input[type='range'] {
-  vertical-align: middle;  /*fix Google’s Chrome*/
-	background-color: transparent; /*attempt to fix Google’s Chrome to no avail*/
+/* for MasterColorPicker 1.0.4   June 3, 2013
+/*hate to do it, but MSIE10 puts us in a pickle.  Besides, the layout IS dependent on fixed-pixel canvas-graphics*/
+#MasterColorPicker_mainPanel,
+#MasterColorPicker_options,
+#MasterColorPicker_Lab {
+	font-family: serif;
+	font-size: 16px; }  /*lock down the font-size*/
+#MasterColorPicker_mainPanel input,
+#MasterColorPicker_options input,
+#MasterColorPicker_Lab input {
+	font-family: "consolas", monospace;
+	font-size: 13px; }  /*lock down the font-size.  Help keep MSIE10’s range-bar in line with others*/
+
+#MasterColorPicker_mainPanel input[type='range'],
+#MasterColorPicker_Lab input[type='range'] {
+	vertical-align: middle;  /*fix Google’s Chrome*/
 	width: 12em; /*align Google’s Chrome and MSIE10 with the smart central-balance of Opera’s native size.*/
+/*	background-color: transparent; /*attempt to fix Google’s Chrome to no avail*/
+/*	color: inherit; /*attempt to fix Safari to no avail*/
+/*	background-color: lightGray; /*attempt to fix Safari to no avail - ignored by Google’s Chrome*/
+/*	border-radius: 1em / .618em; /*beautify attempt to fix Safari*/
 	 }
+span.MCP_fix_Safari {
+	background-color: lightGray;
+	border-radius: 1em / .618em; }
 
 div#paletteLoadingAlert {
 	position: fixed;
@@ -47,25 +67,81 @@ div#paletteLoadingAlert pre .failed {
 	font-weight: bold; }
 
 
+#MasterColorPicker_debugLog  {
+	position: fixed;
+	top: .618em;
+	left: .618em;
+	width: 37em;
+	height: 27em;
+	overflow: auto;
+	white-space: pre;
+	background-color: white;
+	color: black;
+	z-index: 10000; }
+
+
+
 /* These classes are dynamically applied to ALL registered panels when you:
 		• activate/deactivate the MasterColorPicker
 		• click on one of the panels.
 	 The one clicked on gets moved to the highest level. */
 .pickerPanelZLevel1 {z-index: 3142;}  /* adjust base level to your needs */
 .pickerPanelZLevel2 {z-index: 3143;}  /* …and so on… for each new panel you register */
+.pickerPanelZLevel3 {z-index: 3144;}  /* …and so on… for each new panel you register */
 .pickerPanel:hover  {z-index: 6180;}
+
+
 
 #MasterColorPicker_options {
 	position: fixed;
 	top: 0;
 	right: 0;
-	padding: .382em .618em;
+	padding: 2.382em .618em .382em;
 	color: white;
 	background-color: black;
 	border-top-left-radius: .618em; }
+#MasterColorPicker_options > header + label {
+	position: absolute;
+	top: .27em;
+	left: .618em; }
+select#palette_select {
+	color: black;
+	background-color: white;
+	position: relative; }
+
+
+#MasterColorPicker_options header {
+	text-align: center;
+	font-weight: normal;
+	font-family: serif;
+	font-style: italic;
+	font-size: .618em; }
+#MasterColorPicker_options header h1 {
+	font-size: 1.38em;
+	font-style: normal;
+	font-weight: bold;
+	font-variant: small-caps;
+	font-family: sans-serif;
+	display: inline;
+	margin: 0;
+	padding: 0;
+	position: static; }
+#MasterColorPicker_options header address {
+	display: inline;
+	margin: 0;
+	padding: 0;
+	position: static;
+	font-weight: bold;
+	font-family: sans-serif;
+	font-style: normal;
+	font-size: 1.16em; }
+
 #MasterColorPicker_options > div {
 	display: block;
-	position: relative;
+	position: absolute;
+	top: .27em;
+	right: .618em;
+	left: auto;
 	background-color: white;
 	color: black;
 	padding: 0 .1em;
@@ -147,12 +223,13 @@ div#paletteLoadingAlert pre .failed {
 #MasterColorPicker_options > div div fieldset:first-child legend {
 	font-size: 1.01618em;
 	font-weight: bold; }
+#MasterColorPicker_options > div div fieldset:nth-child(2) label {
+	margin: 0; }
 #MasterColorPicker_options ul span {
 	display: inline-block;  }
 
-table#MasterColorPicker_filter_colors {
-	display: none;
-}
+
+
 
 #MasterColorPicker_mainPanel {
 	display: none;
@@ -163,6 +240,7 @@ table#MasterColorPicker_filter_colors {
 	left: auto;
 	max-width: 100%;
 	max-height: 85.4%;  /* ≈ Φ + (1-Φ)*Φ */
+	min-width: 17.618em;
 	overflow: auto;
 	color: white;
 	background-color: black;
@@ -174,64 +252,11 @@ table#MasterColorPicker_filter_colors {
 #MasterColorPicker_mainPanel.activeInterface {
 	display: block;  }
 
-#MasterColorPicker_mainPanel > header + label {
-	position: fixed;
-	top: 0em;
-	right: 6.18em;
-	width: 11.162em;
-	color: white;
-	background-color: black;
-	padding: .27em .618em;
-	border-top-left-radius: .618em; }
-select#palette_select {
-	color: white;
-	background-color: black;
-	position: relative; }
-
-
-#MasterColorPicker_mainPanel header {
-	position: fixed;
-	top: 2.82em;
-	right: 0;
-	width: 28.162em;
-	bottom: auto;
-	background-color: black;
-	color: white;
-	border: none;
-	padding: 1em .85em;
-	text-align: center;
-	font-weight: normal;
-	font-family: serif;
-	font-style: italic;
-	font-size: .618em; }
-#MasterColorPicker_mainPanel header h1 {
-	font-size: 1.38em;
-	font-style: normal;
-	font-weight: bold;
-	font-variant: small-caps;
-	font-family: sans-serif;
-	display: inline;
-	margin: 0;
-	padding: 0;
-	position: static; }
-#MasterColorPicker_mainPanel header address {
-	display: inline;
-	margin: 0;
-	padding: 0;
-	position: static;
-	font-weight: bold;
-	font-family: sans-serif;
-	font-style: normal;
-	font-size: 1.16em; }
-
-
 
 table.color_chart,
 table.palette {
-	border: 1px solid white;
-	margin-bottom: 1.618em;
-	color: white;
-	background-color: black; }
+	border: 1px solid;
+	margin-bottom: 1.618em; }
 table.color_chart caption,
 table.palette caption {
 	color: inherit;
@@ -245,8 +270,6 @@ table.palette caption h6 {
 table.color_chart caption strong,
 table.palette caption h6 {
 	font-variant: small-caps; }
-table.color_chart {
-	min-width: 10.1618em; }
 table.color_chart th {
 	white-space: normal;
 	width: auto; }
@@ -371,10 +394,16 @@ table#BeezEye fieldset label input {
 	display: inline; }
 table#BeezEye input[name='BeezEye_twist_value'],
 table#BeezEye fieldset label input[name='BeezEye_curve_value'],
-table#BeezEye input[name='BeezEye_value'] {
+table#BeezEye input[name='BeezEye_value'],
+table#BeezEye tr:first-child td:first-child span.MCP_fix_Safari,
+table#BeezEye tr:nth-child(3) fieldset label:first-child span.MCP_fix_Safari {
 	display: block; }
+table#BeezEye tr:first-child td:first-child span.MCP_fix_Safari input[name='BeezEye_twist_value'],
+table#BeezEye tr:nth-child(3) fieldset label:first-child span.MCP_fix_Safari input[name='BeezEye_curve_value'],
 table#BeezEye input[name='BeezEye_variety'] {
 	display: inline; }
+table#BeezEye input[name='BeezEye_value'] {
+	background-color: transparent; }
 
 table#BeezEye fieldset {
 	position: absolute;
@@ -435,7 +464,7 @@ table#BeezEye tr:nth-child(2) label {
 	background: -moz-linear-gradient(left, #000000, #FFFFFF); }
 table#BeezEye tr:nth-child(2) label {
 	-ms-transform: rotate(270deg);
-	background: -ms-linear-gradient(180deg, black, white); }
+	background: -ms-linear-gradient(0deg, black, white); }
 
 table#BeezEye tr:nth-child(2) label span {
 	color: black;
@@ -452,7 +481,8 @@ table#BeezEye tr:nth-child(3) fieldset {
 	border: none;  }
 table#BeezEye tr:nth-child(3) fieldset label:first-child {
 	position: absolute;
-	top: 18em;
+	top: auto;
+	bottom: 1.618em;
 	left: -5em;
 	padding: 0;
 	text-align: center;

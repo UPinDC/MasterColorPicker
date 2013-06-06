@@ -19,3 +19,7 @@ http://softmoon-webware.com/MasterColorPicker_instructions.php
 
 this site and it's concept really sucks.
 no way to even keep track of how many downloads.
+
+And what point in keeping record of obsolete and buggy files?
+So I can see what didn't work?!?!?!  A bug is a bug is a bug...
+If you can't keep up with the focus of what you're doing, DON'T PROGRAM.

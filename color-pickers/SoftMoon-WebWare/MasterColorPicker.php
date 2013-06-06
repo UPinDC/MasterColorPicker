@@ -1,19 +1,35 @@
-<!--  //  MasterColorPicker  Copyright © 2012, 2013 Joe Golembieski, SoftMoon-WebWare
-// release 2.0  Jan 17, 2013
-/*
+<!--  MasterColorPicker  Copyright © 2012, 2013 Joe Golembieski, SoftMoon-WebWare
+      release 1.0.4  June 3, 2013
 	Note that these color charts and palettes will work without an enclosing <form>,
 but to retain the settings this file may be included inside an existing web <form></form>
-*/
 -->
 
 <!--  You may move these support scripts to the document head, especially if you plan on using them with other code  -->
 <script type='text/javascript' src='JS_toolbucket/UniDOM.js'></script>
 <script type='text/javascript' src='JS_toolbucket/HTTP.js'></script><!-- for server version, not for desktop use -->
+<!--  script type='text/javascript' src='JS_toolbucket/Log.js'></script><!--  only if you plan on logging to debug -->
 <script type='text/javascript' src='JS_toolbucket/SoftMoon-WebWare/rgb.js'></script>
 <script type='text/javascript' src='JS_toolbucket/SoftMoon-WebWare/Picker.js'></script>
 <script type="text/javascript" src="color-pickers/Rigden_colorblind-convert_table.js"></script>
 
-<div id='MasterColorPicker_options' class='pickerPanel'>
+<!--  div id='MasterColorPicker_debugLog'></div>
+<button onclick="MasterColorPicker.debug.log.clear();" style='position: relative; z-index: 10000'>Clear Log</button  -->
+
+
+<section id='MasterColorPicker_options' class='pickerPanel'>
+<header><h1>MasterColorPicker™</h1> by <address>SoftMoon-WebWare</address></header>
+
+<label>palette: <select id='palette_select' name='palette'>
+<option<?php if ($_POST['palette']==='RainbowMaestro'  or  $_POST['palette']=="")  echo " selected='selected'"?>>RainbowMaestro</option>
+<option<?php if ($_POST['palette']==='Spectral')  echo " selected='selected'"?>>Spectral</option>
+<option<?php if ($_POST['palette']==='BeezEye')  echo " selected='selected'"?>>BeezEye</option>
+<option<?php if ($_POST['palette']==='Simple²')  echo " selected='selected'"?>>Simple²</option>
+<option<?php if ($_POST['palette']==='YinYang NíHóng')  echo " selected='selected'"?>>YinYang NíHóng</option>
+</select></label>
+<script type="text/javascript">//<![CDATA[  capture the sent palette name in case it was a color-names-table - these are built dynamically using JavaScript with data from HTTP
+	if (typeof SoftMoon._POST != 'object')  SoftMoon._POST=new Object;
+	<?php if ($_POST['palette']) echo 'SoftMoon._POST.palette="',$_POST['palette'],'"'; ?>
+//]]></script>
 
 <div>Options▼
 <div>
@@ -37,7 +53,6 @@ but to retain the settings this file may be included inside an existing web <for
 			as integers, so by <strong>not</strong> keeping precision, resulting conversions from the RGB values reflect
 			the “used RGB” values.</p></label>
 </fieldset>
-
 <label>¿<input type='checkbox' name='RGB_autoconvert' id='RGB_autoconvert' value='true' <?php
 		if ($_POST['RGB_autoconvert']==='true'  or  !isset($_POST['palette_select']))  echo 'checked="checked" '; ?>/>auto-convert?
 	<span> Clicking a choice below can auto-convert your selected colors to the chosen color-space-model format.</span></label>
@@ -66,26 +81,10 @@ but to retain the settings this file may be included inside an existing web <for
 </ul>
 </div></div>
 
-</div><!--  close  MasterColorPicker_options  -->
-
-
+</section><!--  close  MasterColorPicker_options  -->
 
 
 <section id='MasterColorPicker_mainPanel' class='pickerPanel init'><!--  class “init” is removed after the color-tables are generated - they need to be shown while this process occurs  -->
-<header><h1>MasterColorPicker™</h1> by <address>SoftMoon-WebWare</address></header>
-
-<label>palette: <select id='palette_select' name='palette'>
-<option<?php if ($_POST['palette']==='RainbowMaestro'  or  $_POST['palette']=="")  echo " selected='selected'"?>>RainbowMaestro</option>
-<option<?php if ($_POST['palette']==='Spectral')  echo " selected='selected'"?>>Spectral</option>
-<option<?php if ($_POST['palette']==='BeezEye')  echo " selected='selected'"?>>BeezEye</option>
-<option<?php if ($_POST['palette']==='Simple²')  echo " selected='selected'"?>>Simple²</option>
-<option<?php if ($_POST['palette']==='YinYang NíHóng')  echo " selected='selected'"?>>YinYang NíHóng</option>
-</select></label>
-<script type="text/javascript">//<![CDATA[  capture the sent palette name in case it was a color-names-table - these are built dynamically using JavaScript with data from HTTP
-	if (typeof SoftMoon._POST != 'object')  SoftMoon._POST=new Object;
-	<?php if ($_POST['palette']) echo 'SoftMoon._POST.palette="',$_POST['palette'],'"'; ?>
-//]]></script>
-
 
 <table class='picker palette' id='Spectral'><caption><h6>Spectral Progressive Color-Picker™</h6>click to choose<span id='SpectralIndicator'>&nbsp;<span id='SpectralSwatch'></span></span></caption>
 
